@@ -28,15 +28,17 @@ long sensor(){
 }
 
 void parser(byte input[]){
-	long dist=sensor();
+	/*long dist=sensor();
 		while(dist<20) {
 			setSpeed(0,false);
 			dist=sensor();
 
 	}
+	*/
 	 // angle is precomputed in adriod app
 	uint8_t angle=(uint8_t)input[0];
 
+	//static uint32_t toneMachine = 499;
 	/*
 	 * speed input:
 	 *  0   is full speed dir -1
@@ -44,7 +46,34 @@ void parser(byte input[]){
 	 *  100 is full speed dir 1
 	 */
 	uint8_t speed=(uint8_t) input[1];
+	char honk=input[2];
 	bool dir=false;
+
+	if(honk>0){
+		switch (honk){
+		//Serial.println(honk);
+		case 'A':tone(12,220,100);
+		break;
+		case 'B':tone(12,246.94,100);
+		break;
+		case 'C':tone(12,261.94,100);
+		break;
+		case 'D':tone(12,293.66,100);
+		break;
+		case 'E':tone(12,329.63,100);
+		break;
+		case 'F':tone(12,349.23,100);
+		break;
+		case 'G':tone(12,392,100);
+		break;
+		default: noTone(12);
+		break;
+		}
+	}
+	if(!honk){
+		noTone(12);
+		//toneMachine = 0;
+	}
 	if(speed>50){
 		dir=true;
 		speed=(speed-50)*5.1;

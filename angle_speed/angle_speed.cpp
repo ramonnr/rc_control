@@ -6,6 +6,7 @@
 #define dirPin 2
 #define trigPin 8
 #define echoPin 9
+#define honkPin 12
 void parser(byte[]);
 
 //The setup function is called once at startup of the sketch
@@ -16,6 +17,7 @@ void setup()
 	pinMode(dirPin,OUTPUT);
 	pinMode(trigPin, OUTPUT);
 	pinMode(echoPin, INPUT);
+	pinMode(honkPin,OUTPUT);
 	Serial.begin(9600);
 // Add your initialization code here
 }
@@ -23,9 +25,13 @@ void setup()
 // The loop function is called in an endless loop
 void loop()
 {
-	byte input[2];
+	byte input[3];
 	if(Serial.available()>0){
-		Serial.readBytes(input,2);
+		Serial.readBytes(input,3);
+		//Serial.println(input[0]);
+		//Serial.println(input[1]);
+		//Serial.println(input[2]);
+		//Serial.println();
 		//Serial.println("b1: %i",input[0]);
 		//Serial.println("b2: %i",input[1]);
 		parser(input);
