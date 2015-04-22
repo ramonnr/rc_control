@@ -8,6 +8,9 @@
 #include <stdint.h>
 #include <arduino.h>
 
+#define trigPin 8
+#define echoPin 9
+
 void setSpeed(uint8_t,bool);
 void setAngle(uint8_t);
 long sensor(void);
@@ -25,10 +28,11 @@ long sensor(){
 }
 
 void parser(byte input[]){
-	if(sensor()<20){
-		while(1) {
+	long dist=sensor();
+		while(dist<20) {
+			setSpeed(0,false);
+			dist=sensor();
 
-		}
 	}
 	 // angle is precomputed in adriod app
 	uint8_t angle=(uint8_t)input[0];
