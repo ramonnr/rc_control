@@ -10,10 +10,26 @@
 
 void setSpeed(uint8_t,bool);
 void setAngle(uint8_t);
+long sensor(void);
 
+long sensor(){
+	 long duration, distance;
+	  digitalWrite(trigPin, LOW);
+	  delayMicroseconds(2);
+	  digitalWrite(trigPin, HIGH);
+	  delayMicroseconds(10);
+	  digitalWrite(trigPin, LOW);
+	  duration = pulseIn(echoPin, HIGH);
+	  distance = (duration/2) / 29.1;
+	  return distance;
+}
 
 void parser(byte input[]){
+	if(sensor()<20){
+		while(1) {
 
+		}
+	}
 	 // angle is precomputed in adriod app
 	uint8_t angle=(uint8_t)input[0];
 

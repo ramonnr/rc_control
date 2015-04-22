@@ -4,6 +4,8 @@
 #define servoPin 11
 #define pwmPin 3
 #define dirPin 2
+#define trigPin 8
+#define echoPin 9
 void parser(byte[]);
 
 //The setup function is called once at startup of the sketch
@@ -12,6 +14,8 @@ void setup()
 	pinMode(servoPin,OUTPUT);
 	pinMode(pwmPin,OUTPUT);
 	pinMode(dirPin,OUTPUT);
+	pinMode(trigPin, OUTPUT);
+	pinMode(echoPin, INPUT);
 	Serial.begin(9600);
 // Add your initialization code here
 }
