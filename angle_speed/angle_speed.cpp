@@ -12,6 +12,7 @@ void parser(byte[]);
 //The setup function is called once at startup of the sketch
 void setup()
 {
+	Serial.println("hello");
 	pinMode(servoPin,OUTPUT);
 	pinMode(pwmPin,OUTPUT);
 	pinMode(dirPin,OUTPUT);

@@ -14,6 +14,7 @@
 void setSpeed(uint8_t,bool);
 void setAngle(uint8_t);
 long sensor(void);
+bool fwd=true;
 
 long sensor(){
 	 long duration, distance;
@@ -28,13 +29,16 @@ long sensor(){
 }
 
 void parser(byte input[]){
-	/*long dist=sensor();
-		while(dist<20) {
-			setSpeed(0,false);
-			dist=sensor();
+	long dist=sensor();
 
+	Serial.println(fwd);
+	if(dist<20) {
+		Serial.println("false");
+		fwd=false;
+	}else{
+		fwd=true;
 	}
-	*/
+
 	 // angle is precomputed in adriod app
 	uint8_t angle=(uint8_t)input[0];
 
@@ -74,7 +78,7 @@ void parser(byte input[]){
 		noTone(12);
 		//toneMachine = 0;
 	}
-	if(speed>50){
+	if(speed>50 && fwd==true){
 		dir=true;
 		speed=(speed-50)*5.1;
 		setSpeed(speed,dir);
@@ -92,6 +96,9 @@ void parser(byte input[]){
 		setSpeed(speed,dir);
 		setAngle(angle);
 		return;
+
+	}else{
+		setSpeed(0,false);
 	}
 	//fall through for undefined behaviour, do nothing
 
