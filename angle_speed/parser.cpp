@@ -14,32 +14,43 @@
 void setSpeed(uint8_t,bool);
 void setAngle(uint8_t);
 long sensor(void);
-bool fwd=true;
+static bool fwd=true;
+static bool stop = false;
+static bool dir;
+
 
 long sensor(){
-	 long duration, distance;
-	  digitalWrite(trigPin, LOW);
-	  delayMicroseconds(2);
-	  digitalWrite(trigPin, HIGH);
-	  delayMicroseconds(10);
-	  digitalWrite(trigPin, LOW);
-	  duration = pulseIn(echoPin, HIGH);
-	  distance = (duration/2) / 29.1;
-	  return distance;
+	long duration, distance;
+	digitalWrite(trigPin, LOW);
+	delayMicroseconds(2);
+	digitalWrite(trigPin, HIGH);
+	delayMicroseconds(10);
+	digitalWrite(trigPin, LOW);
+	duration = pulseIn(echoPin, HIGH);
+	distance = (duration/2) / 29.1;
+	return distance;
 }
 
 void parser(byte input[]){
 	long dist=sensor();
+uint8_t safeMode = input[3];
+	//Serial.println(fwd);
+	if(dist<50 && stop==false && dir==true && safeMode) {
+		//Serial.println("false");
+		fwd=false;
+		stop=true;
+		setSpeed(255,false);
+		delay(150);
+		setSpeed(0,false);
 
-	Serial.println(fwd);
-	if(dist<20) {
-		Serial.println("false");
+	}else if(dist<50 && stop==true && safeMode){
 		fwd=false;
 	}else{
 		fwd=true;
+		stop=false;
 	}
 
-	 // angle is precomputed in adriod app
+	// angle is precomputed in adriod app
 	uint8_t angle=(uint8_t)input[0];
 
 	//static uint32_t toneMachine = 499;
@@ -51,7 +62,7 @@ void parser(byte input[]){
 	 */
 	uint8_t speed=(uint8_t) input[1];
 	char honk=input[2];
-	bool dir=false;
+	dir=false;
 
 	if(honk>0){
 		switch (honk){

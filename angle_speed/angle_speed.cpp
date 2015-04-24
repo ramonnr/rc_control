@@ -26,9 +26,9 @@ void setup()
 // The loop function is called in an endless loop
 void loop()
 {
-	byte input[3];
+	byte input[4];
 	if(Serial.available()>0){
-		Serial.readBytes(input,3);
+		Serial.readBytes(input,4);
 		//Serial.println(input[0]);
 		//Serial.println(input[1]);
 		//Serial.println(input[2]);
