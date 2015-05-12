@@ -14,7 +14,7 @@
 #define reverse false
 
 void setSpeed(uint8_t,bool);
-void setAngle(uint8_t);
+int setAngle(uint8_t);
 long sensor(void);
 void breakPulse();
 
@@ -49,24 +49,26 @@ void parser(byte input[]){
 	uint8_t ammount=input[1];
 	bool dir=false;
 
-	/*
-	long dist=sensor();
 
+	//long dist=sensor();
+/*
 	if(dist<20){
 		breakPulse();
 		return;
 	}
-	*/
+*/
+	int vals;
 
 	switch(op){
 	case 2:
-		setAngle(ammount);
+		vals =  setAngle(ammount);
+		if(vals != ammount) Serial.println((int) vals);
 		break;
 
 	case 1:
 		if(ammount>50){
 			dir=true;
-			ammount=(ammount-50)*5.1;
+			ammount=((ammount-50)*5.1);
 			setSpeed(ammount,dir);
 			return;
 		}
@@ -76,6 +78,7 @@ void parser(byte input[]){
 			return;
 		}
 		else if(ammount<50){
+			dir=false;
 			ammount=abs((ammount-50)*5.1);
 			setSpeed(ammount,dir);
 			return;

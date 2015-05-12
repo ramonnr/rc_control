@@ -5,20 +5,24 @@
  *      Author: Rodriguez
  */
 #include "servo.h"
+#include "arduino.h"
 
 Servo servo=Servo();
 bool isFirstRun=true;
+extern uint8_t gCorrectionVal;
 
-void setAngle(uint8_t angle){
+int setAngle(uint8_t angle){
+//Serial.begin(9600);
 
 	//save exec time, only attach on first run
 	if(isFirstRun){
 		//servo pin is 11
-		servo.attach(11);
+		servo.attach(11, 1000, 2000);
 		isFirstRun=false;
 	}
-	servo.write(angle);
-	return;
+	//Serial.println((angle+gCorrectionVal));
+	servo.write((uint8_t)(angle));
+	return servo.read();
 }
 
 
