@@ -1,5 +1,6 @@
 // Do not remove the include below
 #include "angle_speed.h"
+#include "SoftwareServo.h"
 
 
 //#include "parser.h"
@@ -7,17 +8,21 @@
 #define pwmPin 3
 #define dirPin 2
 #define buttonPin 7
-#define trigPin 8
-#define echoPin 9
+#define trigPin 5
+#define echoPin 6
 #define honkPin 12
 #define vSensPin A2
 #define correctionPin A3
 void parser(byte[]);
+void servoAttatch(void);
+void servoRefresh(void);
 int setAngle(uint8_t angle);
 
+
 uint8_t gCorrectionVal;
-
-
+int speed=1;
+bool refresh=false;
+int limits[2] = {30,150};
 /*
 long sensor2(){
 	long duration;
@@ -46,6 +51,9 @@ void setup()
 	pinMode(buttonPin,INPUT);
 	pinMode(correctionPin,INPUT);
 	Serial.begin(9600);
+	servoAttatch();
+
+
 // Add your initialization code here
 }
 bool foundBuddy=false;
@@ -54,6 +62,7 @@ bool steeringCorrection=false;
 // The loop function is called in an endless loop
 void loop()
 {
+	servoRefresh();
 	/*
 	if(!foundBuddy){
 		foundBuddy);
@@ -84,7 +93,6 @@ void loop()
 	}
 	*/
 
-
 	byte input[2];
 	float output;
 	if(Serial.available()>0){
@@ -93,31 +101,48 @@ void loop()
 		//Serial.println(input[1]);
 		parser(input);
 
-	}else{
+	}/*else{
 	output=(float) ((analogRead(vSensPin)*5.0/1023.0));
 	Serial.print('#');
 	Serial.print(output);
 	Serial.print('@');
-	}
+	}*/
 //Add your repeated code here
 
 
 	//Servo test code
 	/*while(1){
+		SoftwareServo::refresh();
 		//straight test
-		setAngle(120);
+		servo.write(90);
+		delay(300);
 
 		//sweeping test
-		/*for(uint8_t i=0;i<=180;i+=60){
-			setAngle(i);
+		for(uint8_t i=0;i<=180;i+=60){
+			SoftwareServo::refresh();
+			servo.write(i);
 			delay(500);
 		}
 		for(uint8_t i=180;i>=0;i-=60){
-			setAngle(i);
+			SoftwareServo::refresh();
+			servo.write(i);
 			delay(500);
 		}
 
-	}
- */
+	}*/
+//	// refresh angle
+//		int angle = servo.read();
+//
+//		// change direction when limits
+//		if (angle >= limits[1] || angle <= limits[0])  speed = -speed;
+//
+//		servo.write(angle + speed);
+//
+//		// set refresh one time / 2
+//		refresh = refresh ? false : true;
+//		if (refresh) SoftwareServo::refresh();
+//
+//		Serial.print("Angle: ");
+//		Serial.println(angle);
 
 }

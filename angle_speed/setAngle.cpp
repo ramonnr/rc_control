@@ -6,8 +6,9 @@
  */
 #include "servo.h"
 #include "arduino.h"
+#include "SoftwareServo.h"
+extern SoftwareServo servo;
 
-Servo servo=Servo();
 bool isFirstRun=true;
 extern uint8_t gCorrectionVal;
 
@@ -17,7 +18,7 @@ int setAngle(uint8_t angle){
 	//save exec time, only attach on first run
 	if(isFirstRun){
 		//servo pin is 11
-		servo.attach(11, 1000, 2000);
+		//servo.attach(11);
 		isFirstRun=false;
 	}
 	//Serial.println((angle+gCorrectionVal));

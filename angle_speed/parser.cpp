@@ -7,25 +7,30 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <arduino.h>
+#include "SoftwareServo.h"
 
-#define trigPin 8
-#define echoPin 9
+#define trigPin 5
+#define echoPin 6
 #define forward true
 #define reverse false
 
 void setSpeed(uint8_t,bool);
 int setAngle(uint8_t);
-long sensor(void);
+int sensor(void);
 void breakPulse();
+void parser(byte[]);
+void servoAttatch(void);
+SoftwareServo servo;
 
 static bool fwd=true;
 static bool stop = false;
 static bool dir;
 static bool lastDir=reverse;
+static bool first = true;
 
 
-long sensor(){
-	long duration;
+int sensor(){
+	int duration;
 	int distance;
 	digitalWrite(trigPin, LOW);
 	delayMicroseconds(2);
@@ -45,28 +50,36 @@ void breakPulse(){
 
 void parser(byte input[]){
 
+
 	uint8_t op=input[0];
 	uint8_t ammount=input[1];
 	bool dir=false;
+//int dist = sensor();
+//	if(dist<20){
+//		digitalWrite(7,HIGH);
+//	}else{digitalWrite(7,LOW);
+//	}
 
-
-	//long dist=sensor();
-/*
+	/*
 	if(dist<20){
 		breakPulse();
 		return;
 	}
-*/
+	 */
 	int vals;
+
+	//servo.write(70);
 
 	switch(op){
 	case 2:
-		vals =  setAngle(ammount);
-		if(vals != ammount) Serial.println((int) vals);
+		servo.write(ammount);
+		//		vals =  setAngle(ammount);
+		//		if(vals != ammount) Serial.println((int) vals);
 		break;
 
 	case 1:
 		if(ammount>50){
+			digitalWrite(7,HIGH);
 			dir=true;
 			ammount=((ammount-50)*5.1);
 			setSpeed(ammount,dir);
@@ -109,4 +122,11 @@ void parser(byte input[]){
 	return;
 }
 
+void servoAttatch(){
+	servo.attach(11);
+	servo.write(90);
+}
 
+void servoRefresh(){
+	SoftwareServo::refresh();
+}
