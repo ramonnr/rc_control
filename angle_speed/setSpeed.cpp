@@ -17,9 +17,11 @@ void setSpeed(uint8_t speed,bool dir){
 	if(dir){
 		digitalWrite(dirPin,HIGH);
 	}
+
 	else{
 		digitalWrite(dirPin,LOW);
 	}
+
 	analogWrite(pwmPin,speed);
 
 	return;
