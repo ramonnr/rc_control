@@ -21,6 +21,13 @@ void breakPulse(void);
 int setAngle(uint8_t angle);
 int sensor(void);
 int timer;
+int recievedIndex = 0;
+int distance = 0;
+NewPing sonar(trigPin, echoPin, 200);
+byte input[2];
+
+boolean hasBreaked = false;
+boolean started = false;
 
 
 //The setup function is called once at startup of the sketch
@@ -46,31 +53,33 @@ void setup()
 // The loop function is called in an endless loop
 void loop()
 {
-	//Serial.begin(9600);
 	servoRefresh();
-	//distance = sonar.ping_cm();
 
+	distance = sonar.ping_cm();
 
-			//Serial.println(distance);
+	//Serial.print(distance);
 
-//			if(distance < 30 && distance != 0 && !stop){ breakPulse();
-//			}else if(distance < 30 && distance != 0&& stop){ }
-//			else {stop=false;}
+	if(distance != 0){
+		if(distance < 40){
+			if(!hasBreaked) breakPulse();
+			hasBreaked = true;
 
+		}
+	}
+	if(distance > 40 || distance == 0){
+		hasBreaked = false;
+	}
 
+	/*
 	byte input[2];
 	float output;
 	if(Serial.available()>0){
-		//if(!foundBuddy)foundBuddy=true;
 		Serial.readBytes(input,2);
-		//Serial.println(input[1]);
 		parser(input);
-		//Serial.flush();
-		//Serial.end();
 
 	}else{
 
-
+*/
 //	timer++;
 //	if(timer == 100000){
 //		output=(float) ((analogRead(vSensPin)*5.0/1023.0));
@@ -82,24 +91,29 @@ void loop()
 //		}
 
 	}
+
+void serialEvent(){
+
+
+	if(Serial.available()){
+		byte in = Serial.read();
+
+		if(in == 254){ //254 = stoptecken
+			parser(input);
+			input[0] = 0;
+			input[1] = 0;
+			started = 0;
+			recievedIndex = 0;
+		}else if(started){
+			input[recievedIndex] = in;
+			recievedIndex++;
+		}else if(in == 253){ //253 = starttecken
+			started = true;
+		}
+	}
+}
 //Add your repeated code here
 
-}
 
-
-int sensor(){
-	//int echoTime = sonar.ping();
-	//int distance= NewPingConvert(echoTime, US_ROUNDTRIP_CM);
-//	digitalWrite(trigPin, LOW);
-//	delayMicroseconds(2);
-//	digitalWrite(trigPin, HIGH);
-//	delayMicroseconds(10);
-//	digitalWrite(trigPin, LOW);
-//	digitalWrite(echoPin, HIGH);
-//	duration = pulseIn(echoPin, HIGH, 50);
-//	distance = (duration/2) / 29.1;
-
-	//return distance;
-}
 
 

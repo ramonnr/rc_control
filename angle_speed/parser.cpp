@@ -26,8 +26,7 @@ static bool stop = false;
 static bool dir;
 static bool lastDir=reverse;
 static bool first = true;
-int distance = 0;
-NewPing sonar(trigPin, echoPin, 200);
+extern bool hasBreaked;
 
 
 
@@ -35,7 +34,7 @@ void breakPulse(){
 	setSpeed(255,false);
 	delay(200);
 	setSpeed(0,false);
-	stop=true;
+	hasBreaked=true;
 }
 
 void parser(byte input[]){
@@ -48,39 +47,27 @@ void parser(byte input[]){
 
 
 	switch(op){
-	case 2:
+	case 200:
 
 		servo.write(ammount);
 		break;
 
-	case 1:
+	case 201:
 
-		if(ammount>50){
-			distance = 100;//sonar.ping_cm();
-			if(distance>30 && distance!=0){
-				dir=true;
-				ammount=((ammount-50)*5.1);
-				setSpeed(ammount,dir);
-				stop=false;
-				return;
-			}else if(!stop){
-				breakPulse();
-				return;
-			}
-			return;
-
+		if(ammount>50 && !hasBreaked){
+			dir=true;
+			ammount=((ammount-50)*5.1);
+			setSpeed(ammount,dir);
 		}
 		else if(ammount==50){
 			ammount=0;
 			setSpeed(ammount,dir);
-			return;
 		}
 		else if(ammount<50){
 			dir=false;
-			stop=false;
+			hasBreaked=false;
 			ammount=abs((ammount-50)*5.1);
 			setSpeed(ammount,dir);
-			return;
 		}
 
 		break;
