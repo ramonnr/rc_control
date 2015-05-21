@@ -14,7 +14,7 @@
 #define vSensPin A5
 
 
-void parser(byte[]);
+void parser(byte[], int);
 void servoAttatch(void);
 void servoRefresh(void);
 void breakPulse(void);
@@ -22,8 +22,8 @@ int setAngle(uint8_t angle);
 int sensor(void);
 int timer;
 int recievedIndex = 0;
-int distance = 0;
-NewPing sonar(trigPin, echoPin, 200);
+int distance = 100;
+//NewPing sonar(trigPin, echoPin, 200);
 byte input[2];
 
 boolean hasBreaked = false;
@@ -55,20 +55,9 @@ void loop()
 {
 	servoRefresh();
 
-	distance = sonar.ping_cm();
 
-	//Serial.print(distance);
 
-	if(distance != 0){
-		if(distance < 40){
-			if(!hasBreaked) breakPulse();
-			hasBreaked = true;
-
-		}
-	}
-	if(distance > 40 || distance == 0){
-		hasBreaked = false;
-	}
+	//Serial.println(distance);
 
 	/*
 	byte input[2];
@@ -94,12 +83,13 @@ void loop()
 
 void serialEvent(){
 
-
+	//distance = sonar.ping_cm();
+	//if(distance <5) distance = 100;
 	if(Serial.available()){
 		byte in = Serial.read();
 
 		if(in == 254){ //254 = stoptecken
-			parser(input);
+			parser(input, distance);
 			input[0] = 0;
 			input[1] = 0;
 			started = 0;
