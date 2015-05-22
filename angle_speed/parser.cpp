@@ -22,6 +22,7 @@
 #define echoPin 6
 #define forward true
 #define reverse false
+#define ledPin A0
 
 
 /****************PROTOTYPES************/
@@ -34,11 +35,9 @@ int getAvarageDistance(int inDist);
 
 
 /************GLOBAL VARIABLES*************/
-static bool fwd=true;
 static bool useStopper = true;
 static bool dir;
 static bool lastDir=reverse;
-static bool first = true;
 extern bool hasBreaked;
 int medianDistance[5];
 uint32_t medianDistanceIndex = 0;
@@ -89,13 +88,13 @@ void parser(byte input[], int distance){
 
 	switch(op){
 
-	/***************Set servo angle***************************************/
+	/***************Set servo angle********************/
 	case 200:
 
 		servo.write(ammount);
 		break;
 
-	/******************Run Engine*********************************************/
+	/******************Run Engine*********************/
 	case 201:
 		if(ammount>50){
 			if(useStopper){
@@ -122,7 +121,7 @@ void parser(byte input[], int distance){
 		}
 		break;
 
-	/********************Automated stopper on/off***********/
+	/***********Automated stopper on/off***********/
 	case 202:
 		if(ammount==101){
 			useStopper=false;
