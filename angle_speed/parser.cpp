@@ -86,13 +86,16 @@ void parser(byte input[], int distance){
 
 	distance = getAvarageDistance(distance); //Get average distance to avoid missreadings
 
+
 	switch(op){
+
+	/***************Set servo angle***************************************/
 	case 200:
 
 		servo.write(ammount);
 		break;
 
-
+	/******************Run Engine*********************************************/
 	case 201:
 		if(ammount>50){
 			if(useStopper){
@@ -119,7 +122,7 @@ void parser(byte input[], int distance){
 		}
 		break;
 
-
+	/********************Automated stopper on/off***********/
 	case 202:
 		if(ammount==101){
 			useStopper=false;
@@ -161,18 +164,18 @@ int getAvarageDistance(int inDist){
 
 	int tempDist = sonar.ping_cm();
 
-		if(tempDist > 4)
-		{
-			medianDistance[medianDistanceIndex % 5] = tempDist;
-			medianDistanceIndex++;
-			inDist = 0;
-			for(int i = 0; i < 5; i++) inDist += medianDistance[i];
+	if(tempDist > 4)
+	{
+		medianDistance[medianDistanceIndex % 5] = tempDist;
+		medianDistanceIndex++;
+		inDist = 0;
+		for(int i = 0; i < 5; i++) inDist += medianDistance[i];
 
-			inDist = inDist / 5;
-			if(medianDistanceIndex<5) inDist = 100; //To avoid bad values when the first 5 inputs are empty.
-			return inDist;
-		}
+		inDist = inDist / 5;
+		if(medianDistanceIndex<5) inDist = 100; //To avoid bad values when the first 5 inputs are empty.
+		return inDist;
+	}
 
-		else return 100;
+	else return 100;
 
 }
